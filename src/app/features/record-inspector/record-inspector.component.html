@@ -1,0 +1,76 @@
+<div class="bo-record">
+  <header class="bo-record-header">
+    <button class="bo-back-button" (click)="goBack()" aria-label="Back to tables">
+      Back
+    </button>
+    <h2 class="bo-record-title">{{ tableName() }} / {{ primaryKey() }}</h2>
+  </header>
+
+  @if (error()) {
+    <div class="bo-error" role="alert">
+      <p>{{ error() }}</p>
+    </div>
+  } @else if (loading()) {
+    <p class="bo-loading">Loading record...</p>
+  } @else if (fields().length > 0) {
+    <dl class="bo-field-grid" aria-label="Record details for {{ tableName() }}">
+      @for (field of fields(); track field[0]) {
+        <div class="bo-field-cell">
+          <dt class="bo-field-label">{{ field[0] }}</dt>
+          <dd class="bo-field-value">
+            @if (isForeignKeyField(field[0])) {
+              <button
+                class="bo-fk-link"
+                (click)="navigateToRecord(getForeignKeyForField(field[0])!.referencedTable, '' + field[1])"
+                [attr.aria-label]="'View ' + getForeignKeyForField(field[0])!.referencedTable + ' record ' + field[1]"
+              >
+                {{ field[1] }}
+              </button>
+            } @else {
+              {{ field[1] }}
+            }
+          </dd>
+        </div>
+      }
+    </dl>
+
+    @if (relatedDatasources().size > 0) {
+      <div class="bo-related-section">
+        <h3 class="bo-related-heading">Related Records</h3>
+        <ui-tab-group>
+          @for (entry of relatedDatasources() | keyvalue; track entry.key) {
+            <ui-tab [label]="entry.key">
+              <ui-table-view
+                [datasource]="entry.value.datasource"
+                [pageSize]="50"
+                selectionMode="none"
+                [showBuiltInPaginator]="true"
+              >
+                @for (col of entry.value.columns; track col.key) {
+                  @if (col.fk; as fk) {
+                    <ui-template-column [key]="col.key" [headerText]="col.header">
+                      <ng-template let-row>
+                        <a
+                          class="bo-fk-link"
+                          (click)="navigateToRecord(fk.referencedTable, '' + row[col.key]); $event.preventDefault()"
+                          [attr.aria-label]="'View ' + fk.referencedTable + ' record ' + row[col.key]"
+                          href=""
+                        >
+                          {{ row[col.key] }}
+                        </a>
+                      </ng-template>
+                    </ui-template-column>
+                  } @else {
+                    <ui-text-column [key]="col.key" [headerText]="col.header" />
+                  }
+                }
+              </ui-table-view>
+            </ui-tab>
+          }
+        </ui-tab-group>
+      </div>
+    }
+  } @else {
+    <p class="bo-empty">No record data.</p>
+  }
+</div>

@@ -1,0 +1,14 @@
+<ul class="bo-user-menu__list" role="menu">
+  <li role="menuitem">
+    <button
+      class="bo-user-menu__item"
+      [class.bo-user-menu__item--disabled]="!accountUrl()"
+      [disabled]="!accountUrl()"
+      (click)="onAccount()"
+    >Account</button>
+  </li>
+  <li role="separator" class="bo-user-menu__divider"></li>
+  <li role="menuitem">
+    <button class="bo-user-menu__item" (click)="onLogout()">Log out</button>
+  </li>
+</ul>

@@ -1,0 +1,105 @@
+:host {
+  display: block;
+  padding: 24px;
+  max-width: 720px;
+}
+
+.bo-section {
+  margin-bottom: 32px;
+}
+
+.bo-section-heading {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 12px;
+  color: var(--ui-text);
+}
+
+.bo-user-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  p {
+    margin: 0;
+    font-size: 0.875rem;
+    color: var(--ui-text);
+  }
+}
+
+.bo-setting-label {
+  margin: 0 0 8px;
+  font-size: 0.875rem;
+  color: var(--ui-text);
+}
+
+.bo-connection-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.bo-connection-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border: 1px solid var(--ui-border);
+  border-radius: 8px;
+  color: var(--ui-text);
+  background: var(--ui-surface);
+
+  &.is-active {
+    border-color: var(--ui-accent);
+    background: var(--ui-accent-subtle);
+  }
+}
+
+.bo-connection-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.bo-connection-name {
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.bo-connection-url {
+  font-size: 0.75rem;
+  opacity: 0.6;
+  font-family: monospace;
+}
+
+.bo-connection-engine {
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  opacity: 0.5;
+}
+
+.bo-connection-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.bo-active-badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--ui-accent);
+  padding: 4px 8px;
+  border-radius: 4px;
+  background: var(--ui-accent-subtle);
+}
+
+.bo-add-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 480px;
+}

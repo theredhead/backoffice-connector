@@ -1,0 +1,145 @@
+:host {
+  display: block;
+  padding: 16px;
+}
+
+.bo-record-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.bo-back-button {
+  padding: 6px 14px;
+  border: 1px solid var(--ui-border);
+  border-radius: 6px;
+  font-size: 0.8125rem;
+  cursor: pointer;
+  color: var(--ui-text);
+  background: var(--ui-surface);
+  transition: background 0.15s;
+
+  &:hover {
+    background: var(--ui-hover);
+  }
+}
+
+.bo-record-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin: 0;
+  color: var(--ui-text);
+}
+
+.bo-loading {
+  opacity: 0.5;
+  padding: 24px 0;
+  color: var(--ui-text);
+}
+
+.bo-error {
+  padding: 16px;
+  border-radius: 8px;
+  color: var(--ui-danger-text, var(--ui-text));
+  background: var(--ui-danger-surface, var(--ui-surface));
+  border: 1px solid var(--ui-danger-border, var(--ui-border));
+}
+
+.bo-field-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1px;
+  margin: 0;
+  border: 1px solid var(--ui-border);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--ui-surface);
+
+  @media (min-width: 640px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media (min-width: 1400px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.bo-field-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 12px;
+  background: var(--ui-surface);
+  box-shadow:
+    -1px 0 0 var(--ui-border),
+    0 -1px 0 var(--ui-border);
+}
+
+.bo-field-label {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--ui-text-secondary, var(--ui-text));
+  opacity: 0.7;
+  margin: 0;
+}
+
+.bo-field-value {
+  font-size: 0.875rem;
+  color: var(--ui-text);
+  word-break: break-all;
+  margin: 0;
+}
+
+.bo-fk-link {
+  display: inline-block;
+  padding: 2px 8px;
+  border: 1px solid var(--ui-primary);
+  border-radius: 4px;
+  font-size: 0.8125rem;
+  cursor: pointer;
+  color: var(--ui-primary);
+  background: transparent;
+  transition:
+    background 0.15s,
+    color 0.15s;
+
+  &:hover {
+    color: var(--ui-on-primary);
+    background: var(--ui-primary);
+  }
+}
+
+::ng-deep .bo-fk-link {
+  color: var(--ui-primary);
+  text-decoration: underline;
+  cursor: pointer;
+
+  &:hover {
+    color: var(--ui-primary-hover, var(--ui-accent));
+  }
+}
+
+.bo-empty {
+  opacity: 0.5;
+  text-align: center;
+  padding: 32px;
+  color: var(--ui-text);
+}
+
+.bo-related-section {
+  margin-top: 24px;
+}
+
+.bo-related-heading {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 12px;
+  color: var(--ui-text);
+}

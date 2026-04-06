@@ -1,0 +1,22 @@
+include:
+  - docker-compose.yml
+
+services:
+  app:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.app
+    container_name: bo-app
+    ports:
+      - "80:80"
+    depends_on:
+      fetchlane-postgres:
+        condition: service_started
+      fetchlane-mysql:
+        condition: service_started
+      fetchlane-mssql:
+        condition: service_started
+      keycloak:
+        condition: service_healthy
+    networks:
+      - backoffice-net

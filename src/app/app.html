@@ -1,0 +1,20 @@
+<ui-navigation-page
+  [items]="navItems"
+  rootLabel="Backoffice Connector"
+  [(activePage)]="activePage"
+  [sidebarPinned]="true"
+  ariaLabel="Main navigation"
+  (navigated)="onNavigated($event)"
+>
+  <ui-sidebar-footer class="bo-sidebar-footer">
+    <button class="bo-user-badge" (click)="openUserMenu($event)" aria-label="User menu">
+      <ui-avatar [name]="auth.userName()" size="small" [ariaLabel]="auth.userName()" />
+      <span class="bo-sidebar-user">{{ auth.userName() }}</span>
+    </button>
+  </ui-sidebar-footer>
+  <ng-template #content>
+    <div class="bo-page-content">
+      <router-outlet />
+    </div>
+  </ng-template>
+</ui-navigation-page>

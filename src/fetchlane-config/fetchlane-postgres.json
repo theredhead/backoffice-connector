@@ -1,0 +1,53 @@
+{
+  "server": {
+    "host": "0.0.0.0",
+    "port": 3000,
+    "cors": {
+      "enabled": true,
+      "origins": ["http://localhost:4200", "http://localhost"]
+    }
+  },
+  "database": {
+    "url": "${FETCHLANE_DATABASE_URL}"
+  },
+  "limits": {
+    "requestBodyBytes": 1048576,
+    "fetchMaxPageSize": 1000,
+    "fetchMaxPredicates": 25,
+    "fetchMaxSortFields": 8,
+    "rateLimitWindowMs": 60000,
+    "rateLimitMax": 120,
+    "statusRateLimitMax": 600
+  },
+  "enableSchemaFeatures": true,
+  "authentication": {
+    "enabled": true,
+    "mode": "oidc-jwt",
+    "issuerUrl": "${FETCHLANE_OIDC_ISSUER_URL}",
+    "audience": "fetchlane-api",
+    "jwksUrl": "http://keycloak:8080/realms/backoffice/protocol/openid-connect/certs",
+    "claimMappings": {
+      "subject": "sub",
+      "roles": "realm_access.roles"
+    },
+    "authorization": {
+      "schema": ["admin", "guest"],
+      "crud": {
+        "default": {
+          "create": ["admin"],
+          "read": ["admin", "guest"],
+          "update": ["admin"],
+          "delete": ["admin"]
+        },
+        "tables": {
+          "customer": {
+            "create": ["admin"],
+            "read": ["admin"],
+            "update": ["admin"],
+            "delete": ["admin"]
+          }
+        }
+      }
+    }
+  }
+}

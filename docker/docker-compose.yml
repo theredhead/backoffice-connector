@@ -1,0 +1,164 @@
+services:
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    platform: linux/amd64
+    container_name: bo-keycloak
+    environment:
+      KC_BOOTSTRAP_ADMIN_USERNAME: keycloak
+      KC_BOOTSTRAP_ADMIN_PASSWORD: keycloak
+      KC_HTTP_ENABLED: "true"
+      KC_HOSTNAME: localhost
+      KC_HOSTNAME_STRICT: "false"
+    ports:
+      - "8080:8080"
+    volumes:
+      - ../src/keycloak/backoffice-realm.json:/opt/keycloak/data/import/backoffice-realm.json:ro
+    command: start-dev --import-realm --health-enabled=true
+    healthcheck:
+      test: ["CMD-SHELL", "exec 3<>/dev/tcp/localhost/8080 && echo -e 'GET /realms/master HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n' >&3 && cat <&3 | grep -q 'master'"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+      start_period: 60s
+    networks:
+      - backoffice-net
+
+  chinook-postgres:
+    image: postgres:17
+    platform: linux/amd64
+    container_name: bo-chinook-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - "5433:5432"
+    volumes:
+      - ./chinook-scripts/Chinook_PostgreSql.sql:/docker-entrypoint-initdb.d/01-chinook.sql:ro
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    networks:
+      - backoffice-net
+
+  chinook-mysql:
+    image: mysql:8.4
+    platform: linux/amd64
+    container_name: bo-chinook-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: Chinook
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./chinook-scripts/Chinook_MySql.sql:/docker-entrypoint-initdb.d/01-chinook.sql:ro
+      - mysqldata:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    networks:
+      - backoffice-net
+
+  chinook-mssql:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    platform: linux/amd64
+    container_name: bo-chinook-mssql
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "Chinook_Strong!Pass"
+      MSSQL_PID: Developer
+    ports:
+      - "1433:1433"
+    volumes:
+      - ./chinook-scripts/Chinook_SqlServer.sql:/scripts/Chinook_SqlServer.sql:ro
+      - ./mssql-init.sh:/scripts/mssql-init.sh:ro
+      - mssqldata:/var/opt/mssql
+    entrypoint: ["/bin/bash", "/scripts/mssql-init.sh"]
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P \"$$SA_PASSWORD\" -C -Q 'SELECT 1' || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 15
+      start_period: 30s
+    networks:
+      - backoffice-net
+
+  fetchlane-postgres:
+    build:
+      context: /Users/kris/Documents/GitHub/generic-data-access-backend
+      dockerfile: /Users/kris/projects/backoffice-connector/docker/Dockerfile.fetchlane
+    platform: linux/amd64
+    container_name: bo-fetchlane-postgres
+    environment:
+      FETCHLANE_CONFIG: /app/config/fetchlane.json
+      FETCHLANE_DATABASE_URL: postgres://postgres:postgres@chinook-postgres:5432/chinook
+      FETCHLANE_OIDC_ISSUER_URL: http://localhost:8080/realms/backoffice
+    ports:
+      - "3001:3000"
+    volumes:
+      - ../src/fetchlane-config/fetchlane-postgres.json:/app/config/fetchlane.json:ro
+    depends_on:
+      chinook-postgres:
+        condition: service_healthy
+      keycloak:
+        condition: service_healthy
+    networks:
+      - backoffice-net
+
+  fetchlane-mysql:
+    build:
+      context: /Users/kris/Documents/GitHub/generic-data-access-backend
+      dockerfile: /Users/kris/projects/backoffice-connector/docker/Dockerfile.fetchlane
+    platform: linux/amd64
+    container_name: bo-fetchlane-mysql
+    environment:
+      FETCHLANE_CONFIG: /app/config/fetchlane.json
+      FETCHLANE_DATABASE_URL: mysql://root:root@chinook-mysql:3306/Chinook
+      FETCHLANE_OIDC_ISSUER_URL: http://localhost:8080/realms/backoffice
+    ports:
+      - "3002:3000"
+    volumes:
+      - ../src/fetchlane-config/fetchlane-mysql.json:/app/config/fetchlane.json:ro
+    depends_on:
+      chinook-mysql:
+        condition: service_healthy
+      keycloak:
+        condition: service_healthy
+    networks:
+      - backoffice-net
+
+  fetchlane-mssql:
+    build:
+      context: /Users/kris/Documents/GitHub/generic-data-access-backend
+      dockerfile: /Users/kris/projects/backoffice-connector/docker/Dockerfile.fetchlane
+    platform: linux/amd64
+    container_name: bo-fetchlane-mssql
+    environment:
+      FETCHLANE_CONFIG: /app/config/fetchlane.json
+      FETCHLANE_DATABASE_URL: "sqlserver://sa:Chinook_Strong!Pass@chinook-mssql:1433/Chinook"
+      FETCHLANE_OIDC_ISSUER_URL: http://localhost:8080/realms/backoffice
+    ports:
+      - "3003:3000"
+    volumes:
+      - ../src/fetchlane-config/fetchlane-mssql.json:/app/config/fetchlane.json:ro
+    depends_on:
+      chinook-mssql:
+        condition: service_healthy
+      keycloak:
+        condition: service_healthy
+    networks:
+      - backoffice-net
+
+volumes:
+  pgdata:
+  mysqldata:
+  mssqldata:
+
+networks:
+  backoffice-net:
+    driver: bridge

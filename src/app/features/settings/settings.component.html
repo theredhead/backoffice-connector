@@ -1,0 +1,96 @@
+<div class="bo-section">
+  <h2 class="bo-section-heading">User</h2>
+  <div class="bo-user-info">
+    <p>Signed in as <strong>{{ userName() }}</strong></p>
+    <p>Roles: {{ roles().join(', ') }}</p>
+    <ui-button variant="outlined" color="neutral" (click)="logout()">Sign out</ui-button>
+  </div>
+</div>
+
+<div class="bo-section">
+  <h2 class="bo-section-heading">Active Connection</h2>
+  <ui-select
+    [options]="connectionOptions()"
+    [value]="activeConnectionValue()"
+    (valueChange)="onConnectionChange($event)"
+    ariaLabel="Active database connection"
+  />
+</div>
+
+<div class="bo-section">
+  <h2 class="bo-section-heading">Navigation</h2>
+  <p class="bo-setting-label">Open records on:</p>
+  <ui-radio-group
+    name="navMode"
+    [options]="navigationModeOptions"
+    [value]="preferences.navigationMode()"
+    (valueChange)="onNavigationModeChange($any($event))"
+    ariaLabel="Navigation mode"
+  />
+</div>
+
+<div class="bo-section">
+  <h2 class="bo-section-heading">Schema Display</h2>
+  <p class="bo-setting-label">Default view:</p>
+  <ui-radio-group
+    name="schemaMode"
+    [options]="schemaDisplayOptions"
+    [value]="preferences.schemaDisplayMode()"
+    (valueChange)="onSchemaDisplayChange($any($event))"
+    ariaLabel="Schema display mode"
+  />
+</div>
+
+<div class="bo-section">
+  <h2 class="bo-section-heading">Connections</h2>
+
+  <ul class="bo-connection-list">
+    @for (conn of connectionManager.connections(); track $index) {
+      <li
+        class="bo-connection-item"
+        [class.is-active]="connectionManager.activeIndex() === $index"
+      >
+        <div class="bo-connection-info">
+          <span class="bo-connection-name">{{ conn.name }}</span>
+          <span class="bo-connection-url">{{ conn.baseUrl }}</span>
+          <span class="bo-connection-engine">{{ conn.engine }}</span>
+        </div>
+        <div class="bo-connection-actions">
+          @if (connectionManager.activeIndex() !== $index) {
+            <ui-button variant="ghost" color="primary" size="small" (click)="setActive($index)">
+              Activate
+            </ui-button>
+          } @else {
+            <span class="bo-active-badge">Active</span>
+          }
+          @if (conn.engine === 'custom') {
+            <ui-button variant="ghost" color="danger" size="small" (click)="removeConnection($index)">
+              Remove
+            </ui-button>
+          }
+        </div>
+      </li>
+    }
+  </ul>
+</div>
+
+<div class="bo-section">
+  <h2 class="bo-section-heading">Add Custom Connection</h2>
+  <div class="bo-add-form">
+    <ui-input
+      placeholder="Connection name"
+      [text]="newName()"
+      (textChange)="newName.set($event)"
+      ariaLabel="Connection name"
+    ></ui-input>
+    <ui-input
+      placeholder="Fetchlane URL (e.g. http://myserver:3000)"
+      [text]="newUrl()"
+      (textChange)="newUrl.set($event)"
+      ariaLabel="Fetchlane base URL"
+    ></ui-input>
+    <ui-button variant="filled" color="primary" (click)="addConnection()">
+      Add Connection
+    </ui-button>
+  </div>
+</div>

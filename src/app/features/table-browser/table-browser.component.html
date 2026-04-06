@@ -1,0 +1,72 @@
+<div class="bo-browser-layout">
+  <aside class="bo-table-list" aria-label="Table list">
+    <h2 class="bo-sidebar-heading">{{ connectionName() }} Tables</h2>
+    @if (loading() && tables().length === 0) {
+      <p class="bo-sidebar-status">Loading tables...</p>
+    }
+    <ul class="bo-sidebar-items" role="listbox" aria-label="Available tables">
+      @for (table of tables(); track table) {
+        <li
+          role="option"
+          class="bo-sidebar-item"
+          [class.is-selected]="selectedTable() === table"
+          [attr.aria-selected]="selectedTable() === table"
+          (click)="selectTable(table)"
+          (keydown.enter)="selectTable(table)"
+          tabindex="0"
+        >
+          <span class="bo-sidebar-name">{{ table }}</span>
+        </li>
+      }
+    </ul>
+  </aside>
+
+  <section class="bo-records-panel" aria-label="Records">
+    @if (error()) {
+      <div class="bo-error" role="alert">
+        <p>{{ error() }}</p>
+      </div>
+    } @else if (!selectedTable()) {
+      <div class="bo-placeholder">
+        <p>Select a table from the list to browse its records.</p>
+      </div>
+    } @else if (datasource(); as ds) {
+      <div class="bo-records">
+        <h2 class="bo-records-heading">{{ selectedTable() }}</h2>
+
+        <ui-table-view
+          [datasource]="ds"
+          [pageSize]="50"
+          selectionMode="single"
+          [rowClickSelect]="true"
+          [showBuiltInPaginator]="true"
+          (selectionChange)="onSelectionChange($event)"
+          (dblclick)="onTableDblClick()"
+        >
+          @for (col of columns(); track col.key) {
+            @if (col.fk; as fk) {
+              <ui-template-column [key]="col.key" [headerText]="col.header">
+                <ng-template let-row>
+                  <a
+                    class="bo-fk-link"
+                    (click)="navigateToFkRecord(fk, row); $event.stopPropagation(); $event.preventDefault()"
+                    [attr.aria-label]="'View ' + fk.referencedTable + ' record ' + row[col.key]"
+                    href=""
+                  >
+                    {{ row[col.key] }}
+                  </a>
+                </ng-template>
+              </ui-template-column>
+            } @else {
+              <ui-text-column [key]="col.key" [headerText]="col.header" />
+            }
+          }
+        </ui-table-view>
+      </div>
+    } @else if (loading()) {
+      <div class="bo-placeholder">
+        <p>Loading records...</p>
+      </div>
+    }
+  </section>
+</div>

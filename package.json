@@ -1,0 +1,43 @@
+{
+  "name": "@theredhead/backoffice-connector",
+  "version": "0.0.0",
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve",
+    "build": "ng build",
+    "watch": "ng build --watch --configuration development",
+    "test": "ng test",
+    "docker:up": "docker compose -f docker/docker-compose.yml up -d",
+    "docker:down": "docker compose -f docker/docker-compose.yml down",
+    "docker:demo": "docker compose -f docker/docker-compose.yml -f docker/docker-compose.demo.yml up --build -d",
+    "docker:demo:down": "docker compose -f docker/docker-compose.yml -f docker/docker-compose.demo.yml down"
+  },
+  "private": true,
+  "packageManager": "npm@10.9.2",
+  "dependencies": {
+    "@angular/cdk": "21.1.0",
+    "@angular/common": "21.1.0",
+    "@angular/compiler": "21.1.0",
+    "@angular/core": "21.1.0",
+    "@angular/forms": "21.1.0",
+    "@angular/platform-browser": "21.1.0",
+    "@angular/router": "21.1.0",
+    "@theredhead/foundation": "file:../theredhead-frontend-library/dist/theredhead-foundation-0.0.1.tgz",
+    "@theredhead/ui-blocks": "file:../theredhead-frontend-library/dist/theredhead-ui-blocks-0.0.1.tgz",
+    "@theredhead/ui-forms": "file:../theredhead-frontend-library/dist/theredhead-ui-forms-0.0.1.tgz",
+    "@theredhead/ui-kit": "file:../theredhead-frontend-library/dist/ui-kit/theredhead-ui-kit-0.0.1.tgz",
+    "@theredhead/ui-theme": "file:../theredhead-frontend-library/dist/theredhead-ui-theme-0.0.1.tgz",
+    "keycloak-js": "^26.2.3",
+    "rxjs": "~7.8.0",
+    "tslib": "^2.3.0"
+  },
+  "devDependencies": {
+    "@angular/build": "21.1.0",
+    "@angular/cli": "21.1.0",
+    "@angular/compiler-cli": "21.1.0",
+    "jsdom": "^28.0.0",
+    "prettier": "^3.8.1",
+    "typescript": "~5.9.2",
+    "vitest": "^4.0.8"
+  }
+}

@@ -1,0 +1,22 @@
+FROM node:20-slim AS build
+
+WORKDIR /usr/src/app
+
+COPY package*.json ./
+RUN npm ci --ignore-scripts
+
+COPY . .
+RUN npm run build
+
+FROM node:20-slim
+
+WORKDIR /usr/src/app
+
+COPY --from=build /usr/src/app/dist/src ./
+COPY --from=build /usr/src/app/package*.json ./
+
+RUN npm ci --omit=dev --ignore-scripts
+
+EXPOSE 3000
+
+CMD ["node", "./main.js"]
