@@ -1,5 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
-import { Router, RouterOutlet } from '@angular/router';
+import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { filter } from 'rxjs';
 import { UINavigationPage, navItem, type NavigationNode } from '@theredhead/ui-blocks';
 import { PopoverService, UIAvatar, UISidebarFooter } from '@theredhead/ui-kit';
 
@@ -19,13 +21,22 @@ export class App {
   private readonly popover = inject(PopoverService);
   protected readonly auth = inject(AuthService);
 
-  protected readonly activePage = signal('browse');
+  protected readonly activePage = signal(this.routeToPage(this.router.url));
 
   protected readonly navItems = [
     navItem('browse', 'Tables', { route: 'browse' }),
     navItem('schema', 'Schema', { route: 'schema' }),
     navItem('settings', 'Settings', { route: 'settings' }),
   ];
+
+  public constructor() {
+    this.router.events
+      .pipe(
+        filter((e): e is NavigationEnd => e instanceof NavigationEnd),
+        takeUntilDestroyed(),
+      )
+      .subscribe((e) => this.activePage.set(this.routeToPage(e.urlAfterRedirects)));
+  }
 
   protected onNavigated(node: NavigationNode): void {
     if (node.data.route) {
@@ -55,5 +66,10 @@ export class App {
         this.auth.logout();
       }
     });
+  }
+
+  private routeToPage(url: string): string {
+    const segment = url.split('/').filter(Boolean)[0] ?? 'browse';
+    return segment;
   }
 }
