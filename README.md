@@ -1,59 +1,91 @@
-# BackofficeConnector
+# Backoffice Connector
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.6.
+> **⚠ Not production-ready.** This project is a working prototype / demo. APIs,
+> security configuration, and data handling have not been hardened for
+> production use.
 
-## Development server
+A database browser and record editor built with **Angular 21** (zoneless,
+signal-based) that connects to multiple database engines through
+[Fetchlane](https://github.com/niclas-AKB/fetchlane) REST backends, secured by
+**Keycloak** OIDC authentication.
 
-To start a local development server, run:
+## Features
 
-```bash
-ng serve
-```
+- **Multi-engine support** — browse PostgreSQL, MySQL, and SQL Server databases
+  side by side via separate Fetchlane instances.
+- **Table browser** — paginated table view with foreign-key link navigation.
+- **Record inspector** — detail view for individual records with parent and
+  child relation tabs.
+- **CRUD operations** — add, edit, and delete records through auto-generated
+  form dialogs derived from table schema metadata.
+- **Form overrides** — global config for customising generated forms per table.
+- **Schema viewer** — inspect column metadata, preview generated add/edit forms,
+  and copy form JSON for override authoring.
+- **Keycloak authentication** — PKCE-based OIDC login with role-based access
+  (`admin` = full CRUD, `guest` = read-only).
+- **Theming** — Material 3 design tokens with automatic dark mode via
+  `@theredhead/ui-theme`.
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## Prerequisites
 
-## Code scaffolding
+- **Node.js** ≥ 20
+- **npm** ≥ 10
+- **Docker** & **Docker Compose** v2
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+The `@theredhead` UI libraries are consumed as local tarballs (see
+`package.json`). Make sure the sibling `theredhead-frontend-library` repo is
+built before running `npm install`.
 
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+## Quickstart
 
 ```bash
-ng test
+# 1. Install dependencies
+npm install
+
+# 2. Start infrastructure (Keycloak + 3 databases + 3 Fetchlane instances)
+npm run docker:up
+
+# 3. Start the Angular dev server
+npm start
 ```
 
-## Running end-to-end tests
+Open <http://localhost:4200> and log in with one of the demo accounts:
 
-For end-to-end (e2e) testing, run:
+| User    | Password | Role  |
+| ------- | -------- | ----- |
+| `admin` | `admin`  | admin |
+| `guest` | `guest`  | guest |
+
+### Full containerised demo
+
+To run everything inside Docker (including the Angular app served by nginx):
 
 ```bash
-ng e2e
+npm run docker:demo
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+### Tear down
 
-## Additional Resources
+```bash
+npm run docker:down        # dev infrastructure only
+npm run docker:demo:down   # full demo stack
+```
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+## Development
+
+| Command            | Description                           |
+| ------------------ | ------------------------------------- |
+| `npm start`        | Dev server on `http://localhost:4200` |
+| `npm run build`    | Production build → `dist/`            |
+| `npm test`         | Run unit tests (Vitest)               |
+| `npx tsc --noEmit` | Type-check without emitting           |
+
+## Infrastructure
+
+| Service            | Purpose                       | Port |
+| ------------------ | ----------------------------- | ---- |
+| Keycloak           | OIDC identity provider        | 8080 |
+| Fetchlane Postgres | REST API → PostgreSQL Chinook | 3001 |
+| Fetchlane MySQL    | REST API → MySQL Chinook      | 3002 |
+| Fetchlane MSSQL    | REST API → SQL Server Chinook | 3003 |
+| Angular dev server | `ng serve`                    | 4200 |
