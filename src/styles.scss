@@ -1,5 +1,5 @@
 /* Global styles */
-@use 'theme' as theme;
+@use '@theredhead/ui-theme/styles' as theme;
 
 @include theme.theredhead-theme();
 

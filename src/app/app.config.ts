@@ -10,6 +10,7 @@ import { UIInput } from '@theredhead/ui-kit';
 
 import { routes } from './app.routes';
 import { AuthService, authInterceptor } from './core/services/auth.service';
+import { BoForeignKeyField } from './shared/fk-field/fk-field.component';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -19,6 +20,7 @@ export const appConfig: ApplicationConfig = {
     provideFormFields({
       ...BUILT_IN_FIELDS,
       number: { component: UIInput, modelProperty: 'value', defaultConfig: { type: 'number' } },
+      fk: { component: BoForeignKeyField, modelProperty: 'value' },
     }),
     {
       provide: APP_INITIALIZER,

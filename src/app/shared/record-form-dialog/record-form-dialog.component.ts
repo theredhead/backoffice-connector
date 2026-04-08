@@ -1,12 +1,10 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input, signal } from '@angular/core';
 
 import { LoggerFactory } from '@theredhead/foundation';
-import { UIButton, UIIcon, UIIcons, ModalRef, ModalService } from '@theredhead/ui-kit';
+import { UIButton, UIIcon, UIIcons, ModalRef } from '@theredhead/ui-kit';
 import { FormEngine, UIForm } from '@theredhead/ui-forms';
 import type { FormSchema, FormValues } from '@theredhead/ui-forms';
-import type { ForeignKeyInfo } from '../../core/models';
 import type { DbEngine } from '../../core/datasources/fetchlane-datasource';
-import { BoFkLookupDialog } from '../fk-lookup-dialog/fk-lookup-dialog.component';
 
 export interface RecordFormResult {
   readonly action: 'save';
@@ -22,23 +20,32 @@ export interface RecordFormResult {
     :host {
       display: flex;
       flex-direction: column;
-      min-width: 400px;
+      min-width: 420px;
       max-width: 640px;
       max-height: 80vh;
       overflow: hidden;
     }
     .bo-form-dialog-header {
-      padding: 24px 24px 0;
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      padding: 20px 24px 12px;
+      border-bottom: 1px solid var(--ui-border);
     }
     .bo-form-dialog-title {
       font-size: 1.125rem;
       font-weight: 600;
       margin: 0;
     }
+    .bo-form-dialog-subtitle {
+      font-size: 0.8125rem;
+      color: var(--ui-text-muted, var(--ui-text));
+      font-weight: 400;
+    }
     .bo-form-dialog-body {
       flex: 1 1 auto;
       overflow-y: auto;
-      padding: 16px 24px;
+      padding: 20px 24px;
     }
     .bo-form-dialog-error {
       color: var(--ui-danger);
@@ -49,26 +56,9 @@ export interface RecordFormResult {
       display: flex;
       justify-content: flex-end;
       gap: 8px;
-      padding: 16px 24px;
+      padding: 12px 24px;
       border-top: 1px solid var(--ui-border);
-    }
-    .bo-form-dialog-lookups {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      margin-top: 12px;
-      padding-top: 12px;
-      border-top: 1px solid var(--ui-border);
-    }
-    .bo-form-dialog-lookup-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-    }
-    .bo-form-dialog-lookup-label {
-      font-size: 0.8125rem;
-      font-weight: 500;
+      background: color-mix(in srgb, var(--ui-surface) 90%, var(--ui-text) 10%);
     }
     .bo-form-dialog-save-wrapper {
       position: relative;
@@ -122,23 +112,6 @@ export interface RecordFormResult {
     @if (engine(); as eng) {
       <div class="bo-form-dialog-body">
         <ui-form [engine]="eng" [showSubmit]="false" />
-        @if (fkLookups().length > 0) {
-          <div class="bo-form-dialog-lookups">
-            @for (fk of fkLookups(); track fk.column) {
-              <div class="bo-form-dialog-lookup-row">
-                <span class="bo-form-dialog-lookup-label">
-                  {{ humanize(fk.column) }}
-                  @if (fkValues()[fk.column] !== undefined) {
-                    <strong>= {{ fkValues()[fk.column] }}</strong>
-                  }
-                </span>
-                <ui-button size="small" variant="outlined" (click)="openLookup(fk, eng)">
-                  Browse {{ humanize(fk.referencedTable) }}…
-                </ui-button>
-              </div>
-            }
-          </div>
-        }
         @if (errorMessage()) {
           <p class="bo-form-dialog-error">{{ errorMessage() }}</p>
         }
@@ -173,19 +146,16 @@ export interface RecordFormResult {
 export class BoRecordFormDialog {
   private readonly log = inject(LoggerFactory).createLogger('BoRecordFormDialog');
   public readonly modalRef = inject(ModalRef<RecordFormResult>);
-  private readonly modal = inject(ModalService);
 
   public readonly title = input('Record');
   public readonly formSchema = input.required<FormSchema>();
   public readonly initialValues = input<Record<string, unknown>>({});
-  public readonly fkLookups = input<readonly ForeignKeyInfo[]>([]);
   public readonly lookupBaseUrl = input('');
   public readonly lookupEngine = input<DbEngine>('postgres');
 
   protected readonly engine = signal<FormEngine | null>(null);
   protected readonly errorMessage = signal<string | null>(null);
-  protected readonly fkValues = signal<Record<string, unknown>>({});
-  protected readonly saveIcon = UIIcons.Lucide.Accessibility.BadgeInfo;
+  protected readonly saveIcon = UIIcons.Lucide.Files.Save;
 
   protected readonly validationSummary = computed(() => {
     const eng = this.engine();
@@ -216,21 +186,30 @@ export class BoRecordFormDialog {
     if (!schema) {
       return;
     }
-    const eng = new FormEngine(schema);
+    const baseUrl = this.lookupBaseUrl();
+    const dbEngine = this.lookupEngine();
+    const stripped: FormSchema = {
+      ...schema,
+      title: undefined,
+      groups: schema.groups.map((g) => ({
+        ...g,
+        title: undefined,
+        fields: g.fields.map((f) =>
+          f.component === 'fk'
+            ? { ...f, config: { ...f.config, lookupBaseUrl: baseUrl, lookupEngine: dbEngine } }
+            : f,
+        ),
+      })),
+    };
+    const eng = new FormEngine(stripped);
     const initial = this.initialValues();
-    const fkCols = new Set(this.fkLookups().map((fk) => fk.column));
-    const fkVals: Record<string, unknown> = {};
     for (const [key, value] of Object.entries(initial)) {
       try {
         eng.setValue(key, value);
-        if (fkCols.has(key)) {
-          fkVals[key] = value;
-        }
       } catch {
         // Field may not exist in form (e.g. identity columns)
       }
     }
-    this.fkValues.set(fkVals);
     this.engine.set(eng);
   }
 
@@ -244,37 +223,5 @@ export class BoRecordFormDialog {
 
   protected onCancel(): void {
     this.modalRef.close(undefined);
-  }
-
-  protected openLookup(fk: ForeignKeyInfo, eng: FormEngine): void {
-    const ref = this.modal.openModal<BoFkLookupDialog, unknown>({
-      component: BoFkLookupDialog,
-      inputs: {
-        title: `Select ${this.humanize(fk.referencedTable)}`,
-        baseUrl: this.lookupBaseUrl(),
-        referencedTable: fk.referencedTable,
-        referencedColumn: fk.referencedColumn,
-        engine: this.lookupEngine(),
-      },
-      ariaLabel: `Select ${fk.referencedTable} record`,
-    });
-
-    ref.closed.subscribe((value) => {
-      if (value !== undefined) {
-        try {
-          eng.setValue(fk.column, value);
-          this.fkValues.update((v) => ({ ...v, [fk.column]: value }));
-        } catch {
-          this.log.error(`Failed to set FK value for ${fk.column}`);
-        }
-      }
-    });
-  }
-
-  protected humanize(key: string): string {
-    return key
-      .replace(/_/g, ' ')
-      .replace(/([a-z])([A-Z])/g, '$1 $2')
-      .replace(/\b\w/g, (c) => c.toUpperCase());
   }
 }
