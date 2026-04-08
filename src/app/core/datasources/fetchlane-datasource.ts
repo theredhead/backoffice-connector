@@ -251,14 +251,21 @@ export class FetchlaneDatasource
       return;
     }
     const pkValue = updatedRow[pkCol];
-    const idx = this.rows.findIndex((r) => r[pkCol] === pkValue);
+    if (pkValue == null) {
+      this.log.warn(`updateRow: missing PK column "${pkCol}" in updated row`);
+      return;
+    }
+    // eslint-disable-next-line eqeqeq
+    const idx = this.rows.findIndex((r) => r[pkCol] == pkValue);
     if (idx !== -1) {
-      this.rows[idx] = updatedRow;
+      this.rows[idx] = { ...this.rows[idx], ...updatedRow };
       const cached = this.pageCache.get(this.pageIndex);
       if (cached && idx < cached.length) {
-        cached[idx] = updatedRow;
+        cached[idx] = this.rows[idx];
       }
       this.noteRowChanged.emit({ rowIndex: this.pageIndex * this.pageSize + idx });
+    } else {
+      this.log.warn(`updateRow: no matching row for ${pkCol}=${pkValue}`);
     }
   }
 

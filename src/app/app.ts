@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { afterNextRender, ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { filter } from 'rxjs';
@@ -11,6 +11,7 @@ import {
   UIToastContainer,
 } from '@theredhead/ui-kit';
 
+import { LoggerFactory } from '@theredhead/foundation';
 import { AuthService } from './core/services/auth.service';
 import { BoUserMenu, type UserMenuAction } from './features/user-menu/user-menu.component';
 
@@ -23,6 +24,7 @@ import { BoUserMenu, type UserMenuAction } from './features/user-menu/user-menu.
   host: { class: 'bo-root' },
 })
 export class App {
+  private readonly log = inject(LoggerFactory).createLogger('App');
   private readonly router = inject(Router);
   private readonly popover = inject(PopoverService);
   protected readonly auth = inject(AuthService);
@@ -36,6 +38,14 @@ export class App {
   ];
 
   public constructor() {
+    afterNextRender(() => {
+      const start = (window as unknown as Record<string, unknown>)['__boStartTime'];
+      if (typeof start === 'number') {
+        const elapsed = performance.now() - start;
+        console.warn(`[App] Time to first render: ${elapsed.toFixed(0)} ms`);
+      }
+    });
+
     this.router.events
       .pipe(
         filter((e): e is NavigationEnd => e instanceof NavigationEnd),

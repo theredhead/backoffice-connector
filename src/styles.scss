@@ -19,3 +19,8 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+// Allow the FK lookup dialog to be wider than the default 40rem modal cap.
+dialog.ui-dialog-service:has(bo-fk-lookup-dialog) {
+  max-width: min(90vw, 960px);
+}

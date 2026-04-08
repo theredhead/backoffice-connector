@@ -177,11 +177,15 @@ export class BoTableBrowser {
       return;
     }
     const formSchema = this.formFactory.buildFormSchema(schema, 'add');
+    const fks = this.fetchlane.extractForeignKeys(schema);
     const ref = this.modal.openModal<BoRecordFormDialog, RecordFormResult>({
       component: BoRecordFormDialog,
       inputs: {
         title: `Add ${schema.table_name}`,
         formSchema,
+        fkLookups: fks,
+        lookupBaseUrl: this.baseUrl(),
+        lookupEngine: this.engine(),
       },
       ariaLabel: `Add ${schema.table_name} record`,
     });
@@ -203,12 +207,16 @@ export class BoTableBrowser {
       return;
     }
     const formSchema = this.formFactory.buildFormSchema(schema, 'edit');
+    const fks = this.fetchlane.extractForeignKeys(schema);
     const ref = this.modal.openModal<BoRecordFormDialog, RecordFormResult>({
       component: BoRecordFormDialog,
       inputs: {
         title: `Edit ${schema.table_name}`,
         formSchema,
         initialValues: row,
+        fkLookups: fks,
+        lookupBaseUrl: this.baseUrl(),
+        lookupEngine: this.engine(),
       },
       ariaLabel: `Edit ${schema.table_name} record`,
     });

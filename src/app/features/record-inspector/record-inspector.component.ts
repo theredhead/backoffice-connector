@@ -235,12 +235,16 @@ export class BoRecordInspector {
       return;
     }
     const formSchema = this.formFactory.buildFormSchema(schema, 'edit');
+    const fks = this.fetchlane.extractForeignKeys(schema);
     const ref = this.modal.openModal<BoRecordFormDialog, RecordFormResult>({
       component: BoRecordFormDialog,
       inputs: {
         title: `Edit ${schema.table_name}`,
         formSchema,
         initialValues: record,
+        fkLookups: fks,
+        lookupBaseUrl: this.baseUrl(),
+        lookupEngine: this.engine(),
       },
       ariaLabel: `Edit ${schema.table_name} record`,
     });

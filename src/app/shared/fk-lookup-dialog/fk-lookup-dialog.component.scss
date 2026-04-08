@@ -1,0 +1,70 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  width: 80vw;
+  max-width: 960px;
+  height: 70vh;
+  max-height: 720px;
+  overflow: hidden;
+}
+
+.bo-fk-lookup-header {
+  padding: 24px 24px 0;
+}
+
+.bo-fk-lookup-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.bo-fk-lookup-body {
+  flex: 1 1 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: 16px 24px;
+  gap: 12px;
+}
+
+.bo-fk-lookup-body ::ng-deep ui-table-view {
+  height: calc(70vh - 200px);
+  max-height: 520px;
+  display: flex;
+  flex-direction: column;
+}
+
+.bo-fk-lookup-body ::ng-deep ui-table-view .root {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.bo-fk-lookup-body ::ng-deep ui-table-body {
+  flex: 1;
+  min-height: 0;
+}
+
+.bo-fk-lookup-body ::ng-deep .table-body-viewport {
+  height: 100% !important;
+}
+
+.bo-fk-lookup-loading {
+  opacity: 0.6;
+}
+
+.bo-fk-lookup-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 16px 24px;
+  border-top: 1px solid var(--ui-border);
+}
+
+.bo-fk-lookup-timing {
+  margin-right: auto;
+  font-size: 0.75rem;
+  color: var(--ui-text-muted);
+  align-self: center;
+}
