@@ -11,6 +11,6 @@ workspace. It covers:
 - CSS token namespace (`--ui-*` from library, `--bo-*` for app), centralised dark mode
 - Class member ordering, access modifiers, Logger usage
 - Fetchlane REST API integration patterns
-- Keycloak OIDC authentication (APP_INITIALIZER, HTTP interceptor, role guards)
+- Keycloak OIDC authentication (`OidcAdapter` abstraction, `AuthorizationService`, session monitoring)
 - Docker infrastructure (Compose, Keycloak, Chinook databases, Fetchlane instances)
 - Git commit conventions and verification checklist

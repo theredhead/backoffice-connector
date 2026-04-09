@@ -6,18 +6,29 @@ import { UINavigationPage, navItem, type NavigationNode } from '@theredhead/ui-b
 import {
   PopoverService,
   UIAvatar,
+  UIButton,
+  UIIcon,
   UIIcons,
   UISidebarFooter,
   UIToastContainer,
 } from '@theredhead/ui-kit';
 
 import { LoggerFactory } from '@theredhead/foundation';
-import { AuthService } from './core/services/auth.service';
+import { AuthorizationService } from './core/services/authorization.service';
+import { SessionMonitorService } from './core/services/session-monitor.service';
 import { BoUserMenu, type UserMenuAction } from './features/user-menu/user-menu.component';
 
 @Component({
   selector: 'bo-root',
-  imports: [RouterOutlet, UINavigationPage, UIAvatar, UISidebarFooter, UIToastContainer],
+  imports: [
+    RouterOutlet,
+    UINavigationPage,
+    UIAvatar,
+    UIButton,
+    UIIcon,
+    UISidebarFooter,
+    UIToastContainer,
+  ],
   templateUrl: './app.html',
   styleUrl: './app.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -27,9 +38,11 @@ export class App {
   private readonly log = inject(LoggerFactory).createLogger('App');
   private readonly router = inject(Router);
   private readonly popover = inject(PopoverService);
-  protected readonly auth = inject(AuthService);
+  protected readonly auth = inject(AuthorizationService);
+  protected readonly sessionMonitor = inject(SessionMonitorService);
 
   protected readonly activePage = signal(this.routeToPage(this.router.url));
+  protected readonly refreshIcon = UIIcons.Lucide.Arrows.RefreshCw;
 
   protected readonly navItems = [
     navItem('browse', 'Tables', { route: 'browse', icon: UIIcons.Lucide.Files.Table }),
@@ -82,6 +95,10 @@ export class App {
         this.auth.logout();
       }
     });
+  }
+
+  protected onRefresh(): void {
+    window.location.reload();
   }
 
   private routeToPage(url: string): string {

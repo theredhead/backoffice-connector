@@ -1,22 +1,35 @@
-<ui-navigation-page
-  [items]="navItems"
-  rootLabel="Fetchlane Navigator"
-  [(activePage)]="activePage"
-  [sidebarPinned]="true"
-  storageKey="nav"
-  ariaLabel="Main navigation"
-  (navigated)="onNavigated($event)"
->
-  <footer uiSidebarFooter class="bo-sidebar-footer">
-    <button class="bo-user-badge" (click)="openUserMenu($event)" aria-label="User menu">
-      <ui-avatar [name]="auth.userName()" size="small" [ariaLabel]="auth.userName()" />
-      <span class="bo-sidebar-user">{{ auth.userName() }}</span>
-    </button>
-  </footer>
-  <ng-template #content>
-    <div class="bo-page-content">
-      <router-outlet />
+@if (sessionMonitor.sessionExpired()) {
+  <div class="bo-session-blackout">
+    <div class="bo-session-blackout__card">
+      <h2 class="bo-session-blackout__title">Your session ended</h2>
+      <p class="bo-session-blackout__message">You have been logged out due to inactivity.</p>
+      <ui-button color="primary" (click)="onRefresh()">
+        <ui-icon [svg]="refreshIcon" [size]="16" />
+        Refresh
+      </ui-button>
     </div>
-  </ng-template>
-</ui-navigation-page>
-<ui-toast-container />
+  </div>
+} @else {
+  <ui-navigation-page
+    [items]="navItems"
+    rootLabel="Fetchlane Navigator"
+    [(activePage)]="activePage"
+    [sidebarPinned]="true"
+    storageKey="nav"
+    ariaLabel="Main navigation"
+    (navigated)="onNavigated($event)"
+  >
+    <footer uiSidebarFooter class="bo-sidebar-footer">
+      <button class="bo-user-badge" (click)="openUserMenu($event)" aria-label="User menu">
+        <ui-avatar [name]="auth.userName()" size="small" [ariaLabel]="auth.userName()" />
+        <span class="bo-sidebar-user">{{ auth.userName() }}</span>
+      </button>
+    </footer>
+    <ng-template #content>
+      <div class="bo-page-content">
+        <router-outlet />
+      </div>
+    </ng-template>
+  </ui-navigation-page>
+  <ui-toast-container />
+}

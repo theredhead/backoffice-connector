@@ -9,14 +9,21 @@ import { BUILT_IN_FIELDS, provideFormFields } from '@theredhead/ui-forms';
 import { UIInput } from '@theredhead/ui-kit';
 
 import { routes } from './app.routes';
-import { AuthService, authInterceptor } from './core/services/auth.service';
+import { OidcAdapter } from './core/services/oidc-adapter';
+import { KeycloakAdapter } from './core/services/keycloak-adapter';
+import {
+  AuthorizationService,
+  authorizationInterceptor,
+} from './core/services/authorization.service';
+import { SessionMonitorService } from './core/services/session-monitor.service';
 import { BoForeignKeyField } from './shared/fk-field/fk-field.component';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
-    provideHttpClient(withInterceptors([authInterceptor])),
+    { provide: OidcAdapter, useClass: KeycloakAdapter },
+    provideHttpClient(withInterceptors([authorizationInterceptor])),
     provideFormFields({
       ...BUILT_IN_FIELDS,
       number: { component: UIInput, modelProperty: 'value', defaultConfig: { type: 'number' } },
@@ -24,8 +31,12 @@ export const appConfig: ApplicationConfig = {
     }),
     {
       provide: APP_INITIALIZER,
-      useFactory: (auth: AuthService) => () => auth.init(),
-      deps: [AuthService],
+      useFactory:
+        (auth: AuthorizationService, sessionMonitor: SessionMonitorService) => async () => {
+          await auth.init();
+          sessionMonitor.start();
+        },
+      deps: [AuthorizationService, SessionMonitorService],
       multi: true,
     },
   ],

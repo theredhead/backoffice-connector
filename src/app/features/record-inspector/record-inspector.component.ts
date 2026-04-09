@@ -28,7 +28,7 @@ import type { DbEngine } from '../../core/datasources/fetchlane-datasource';
 import { ConnectionManagerService } from '../../core/services/connection-manager.service';
 import { FetchlaneService } from '../../core/services/fetchlane.service';
 import { FetchlaneDatasource } from '../../core/datasources/fetchlane-datasource';
-import { AuthService } from '../../core/services/auth.service';
+import { AuthorizationService } from '../../core/services/authorization.service';
 import { SchemaFormFactory } from '../../core/services/schema-form-factory.service';
 import { BoConfirmDialog } from '../../shared/confirm-dialog/confirm-dialog.component';
 import {
@@ -73,7 +73,7 @@ export class BoRecordInspector {
   private readonly injector = inject(Injector);
   private readonly fetchlane = inject(FetchlaneService);
   private readonly connectionManager = inject(ConnectionManagerService);
-  private readonly auth = inject(AuthService);
+  private readonly auth = inject(AuthorizationService);
   private readonly formFactory = inject(SchemaFormFactory);
   private readonly modal = inject(ModalService);
   private readonly toast = inject(ToastService);

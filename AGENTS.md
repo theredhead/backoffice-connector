@@ -205,17 +205,52 @@ Each backend exposes the same REST API:
 | `GET /api/data-access/:table/record/:pk` | Single record          |
 | `POST /api/data-access/fetch`            | Advanced FetchRequest  |
 
-All requests require a Bearer token from Keycloak.
+All requests require a Bearer token obtained via OIDC.
 
 ---
 
-## Keycloak Authentication
+## Authentication vs Authorization
+
+These are **two distinct concerns** — never conflate them:
+
+| Concern            | Responsibility                                          | Layer in this app      |
+| ------------------ | ------------------------------------------------------- | ---------------------- |
+| **Authentication** | Proving _who_ the user is (OIDC login, tokens, session) | `OidcAdapter`          |
+| **Authorization**  | Deciding _what_ the user may do (roles, permissions)    | `AuthorizationService` |
+
+### Authentication — `OidcAdapter` (abstract) + provider implementation
+
+`OidcAdapter` is an abstract class that defines the provider-agnostic OIDC
+contract: signals (`authenticated`, `userName`, `roles`, `accountUrl`,
+`sessionExpiresAt`) and methods (`init()`, `getToken()`, `logout()`,
+`extendSession()`).
+
+The concrete implementation (`KeycloakAdapter`) is registered in `app.config.ts`:
+
+```ts
+{ provide: OidcAdapter, useClass: KeycloakAdapter }
+```
+
+To swap identity providers, create a new class extending `OidcAdapter` and
+change the single `useClass` line. **No other code needs to change.**
+
+### Authorization — `AuthorizationService`
+
+`AuthorizationService` delegates all authentication concerns to the injected
+`OidcAdapter` and adds authorization logic on top (e.g. `canWrite`, `hasRole()`).
+All application code injects `AuthorizationService` — never `OidcAdapter`
+directly.
+
+The `authorizationInterceptor` (exported alongside the service) attaches the
+Bearer token to all `/api/` requests.
+
+### Keycloak Configuration
 
 - **Realm:** `backoffice`
 - **Client ID:** `backoffice-app` (public client, PKCE S256)
 - **Roles:** `admin` (full CRUD), `guest` (read-only, no Customer table)
 - Auth is initialized via `APP_INITIALIZER` before the app renders
-- An HTTP interceptor attaches the Bearer token to all Fetchlane API calls
+- `SessionMonitorService` watches session expiry and shows a warning dialog
 - Demo accounts: `admin:admin`, `guest:guest`
 
 ---

@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@a
 import { UIButton, UIInput, UIRadioGroup, UISelect, type SelectOption } from '@theredhead/ui-kit';
 
 import { ConnectionManagerService } from '../../core/services/connection-manager.service';
-import { AuthService } from '../../core/services/auth.service';
+import { AuthorizationService } from '../../core/services/authorization.service';
 import { FetchlaneService } from '../../core/services/fetchlane.service';
 import {
   PreferencesService,
@@ -21,7 +21,7 @@ import type { ConnectionConfig } from '../../core/models';
 })
 export class BoSettings {
   protected readonly connectionManager = inject(ConnectionManagerService);
-  private readonly auth = inject(AuthService);
+  private readonly auth = inject(AuthorizationService);
   protected readonly fetchlane = inject(FetchlaneService);
   protected readonly preferences = inject(PreferencesService);
 
