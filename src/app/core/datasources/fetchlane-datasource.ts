@@ -221,6 +221,34 @@ export class FetchlaneDatasource
     return this.schema.columns.length > 0 ? this.schema.columns[0].column_name : null;
   }
 
+  /**
+   * Fetches all rows across all pages for the current sort/filter state.
+   * Intended for bulk export — not for normal browsing.
+   */
+  public async fetchAllRows(): Promise<readonly Record<string, unknown>[]> {
+    const pageSize = 500;
+    const url = `${this.baseUrl}/api/data-access/fetch`;
+    const all: Record<string, unknown>[] = [];
+    let page = 0;
+
+    while (true) {
+      const body = {
+        table: this.table,
+        predicates: this.predicates,
+        sort: this.sortExpressions,
+        pagination: { size: pageSize, index: page },
+      };
+      const response = await firstValueFrom(this.http.post<FetchlanePage>(url, body));
+      all.push(...response.rows);
+      if (response.rows.length < pageSize) {
+        break;
+      }
+      page++;
+    }
+
+    return all;
+  }
+
   public async loadSchema(): Promise<FullTableSchema> {
     const url = `${this.baseUrl}/api/data-access/${encodeURIComponent(this.table)}/schema`;
     this.schema = await firstValueFrom(this.http.get<FullTableSchema>(url));

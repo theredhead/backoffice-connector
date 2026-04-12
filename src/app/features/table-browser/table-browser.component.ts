@@ -39,6 +39,7 @@ import {
   type RecordFormResult,
 } from '../../shared/record-form-dialog/record-form-dialog.component';
 import type { ForeignKeyInfo, FullTableSchema } from '../../core/models';
+import { buildCsv, downloadText } from '../../shared/csv/csv';
 
 interface ColumnDef {
   readonly key: string;
@@ -87,6 +88,9 @@ export class BoTableBrowser {
   protected readonly pencilIcon = UIIcons.Lucide.Cursors.Pencil;
   protected readonly trashIcon = UIIcons.Lucide.Files.Trash;
   protected readonly eyeIcon = UIIcons.Lucide.Accessibility.Eye;
+  protected readonly exportCsvIcon = UIIcons.Lucide.Arrows.FileDown;
+
+  protected readonly exporting = signal(false);
 
   private readonly filterSubject = new Subject<FilterDescriptor>();
   private readonly destroyRef = inject(DestroyRef);
@@ -392,6 +396,25 @@ export class BoTableBrowser {
 
   protected onFilterChanged(descriptor: FilterDescriptor): void {
     this.filterSubject.next(descriptor);
+  }
+
+  protected async exportCsv(): Promise<void> {
+    const ds = this.datasource();
+    const table = this.selectedTable();
+    const cols = this.columns();
+    if (!ds || !table || cols.length === 0) {
+      return;
+    }
+    this.exporting.set(true);
+    try {
+      const rows = await ds.fetchAllRows();
+      downloadText(buildCsv(cols, rows), `${table}.csv`);
+    } catch (err) {
+      this.log.error('CSV export failed', [err]);
+      this.toast.error('CSV export failed');
+    } finally {
+      this.exporting.set(false);
+    }
   }
 
   private sqlTypeToFilterType(dataType: string): FilterFieldType {

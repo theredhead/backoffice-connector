@@ -23,6 +23,10 @@
           <div class="bo-records-toolbar">
             <h2 class="bo-records-heading">{{ selectedTable() }}</h2>
             <div class="bo-toolbar-actions">
+              <ui-button size="small" variant="outlined" color="neutral" [disabled]="exporting()" (click)="exportCsv()" ariaLabel="Export as CSV">
+                <ui-icon [svg]="exportCsvIcon" [size]="16" />
+                {{ exporting() ? 'Exporting…' : 'Export CSV' }}
+              </ui-button>
               @if (canWrite()) {
                 <ui-button size="small" color="primary" (click)="openAddDialog()" ariaLabel="Add record">
                   <ui-icon [svg]="plusIcon" [size]="16" />
