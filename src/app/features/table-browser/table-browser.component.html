@@ -48,7 +48,7 @@
           >
             @for (col of columns(); track col.key) {
               @if (col.fk; as fk) {
-                <ui-template-column [key]="col.key" [headerText]="col.header">
+                <ui-template-column [key]="col.key" [headerText]="col.header" [sortable]="true">
                   <ng-template let-row>
                     <a
                       class="bo-fk-link"
@@ -61,7 +61,7 @@
                   </ng-template>
                 </ui-template-column>
               } @else {
-                <ui-text-column [key]="col.key" [headerText]="col.header" />
+                <ui-text-column [key]="col.key" [headerText]="col.header" [sortable]="true" />
               }
             }
             @if (canWrite()) {
