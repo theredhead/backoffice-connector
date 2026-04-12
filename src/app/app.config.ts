@@ -5,8 +5,8 @@ import {
 } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
-import { BUILT_IN_FIELDS, provideFormFields } from '@theredhead/ui-forms';
-import { UIInput } from '@theredhead/ui-kit';
+import { BUILT_IN_FIELDS, provideFormFields } from '@theredhead/lucid-forms';
+import { UIInput } from '@theredhead/lucid-kit';
 
 import { routes } from './app.routes';
 import { OidcAdapter } from './core/services/oidc-adapter';

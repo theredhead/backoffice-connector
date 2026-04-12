@@ -1,7 +1,7 @@
 import '@angular/compiler';
 import { computed, signal } from '@angular/core';
-import { FormEngine } from '@theredhead/ui-forms';
-import type { FormSchema } from '@theredhead/ui-forms';
+import { FormEngine } from '@theredhead/lucid-forms';
+import type { FormSchema } from '@theredhead/lucid-forms';
 
 // ── Helpers ──────────────────────────────────────────────────────────
 

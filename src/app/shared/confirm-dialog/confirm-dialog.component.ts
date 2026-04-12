@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
 
-import { UIButton, UIIcon, UIIcons, ModalRef } from '@theredhead/ui-kit';
+import { UIButton, UIIcon, UIIcons, ModalRef } from '@theredhead/lucid-kit';
 
 @Component({
   selector: 'bo-confirm-dialog',

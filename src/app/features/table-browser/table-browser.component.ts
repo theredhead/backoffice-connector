@@ -24,9 +24,9 @@ import {
   type FilterDescriptor,
   type FilterFieldDefinition,
   type FilterFieldType,
-} from '@theredhead/ui-kit';
-import { UIMasterDetailView } from '@theredhead/ui-blocks';
-import { ArrayDatasource, LoggerFactory } from '@theredhead/foundation';
+} from '@theredhead/lucid-kit';
+import { UIMasterDetailView } from '@theredhead/lucid-blocks';
+import { ArrayDatasource, LoggerFactory } from '@theredhead/lucid-foundation';
 import type { DbEngine } from '../../core/datasources/fetchlane-datasource';
 import { ConnectionManagerService } from '../../core/services/connection-manager.service';
 import { FetchlaneService } from '../../core/services/fetchlane.service';

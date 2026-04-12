@@ -34,7 +34,7 @@
             ],
             "stylePreprocessorOptions": {
               "includePaths": [
-                "node_modules/@theredhead/ui-theme/src/lib/styles"
+                "node_modules/@theredhead/lucid-theme/src/lib/styles"
               ]
             }
           },
@@ -81,7 +81,11 @@
           "defaultConfiguration": "development"
         },
         "test": {
-          "builder": "@angular/build:unit-test"
+          "builder": "@angular/build:unit-test",
+          "options": {
+            "tsConfig": "tsconfig.spec.json",
+            "setupFiles": ["src/test-setup.mjs"]
+          }
         }
       }
     }

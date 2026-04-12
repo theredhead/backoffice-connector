@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, input, model } from '@angular/core';
 
-import { UIButton, UIIcon, UIIcons, UIInput, ModalService } from '@theredhead/ui-kit';
+import { UIButton, UIIcon, UIIcons, UIInput, ModalService } from '@theredhead/lucid-kit';
 import type { DbEngine } from '../../core/datasources/fetchlane-datasource';
 import { BoFkLookupDialog } from '../fk-lookup-dialog/fk-lookup-dialog.component';
 

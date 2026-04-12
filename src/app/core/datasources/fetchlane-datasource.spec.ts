@@ -1,10 +1,9 @@
-import '../../../test-setup';
 import { Injector } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { HttpClient } from '@angular/common/http';
 import { of, throwError } from 'rxjs';
-import { LoggerFactory, SortDirection } from '@theredhead/foundation';
-import { ToastService, type FilterDescriptor } from '@theredhead/ui-kit';
+import { SortDirection } from '@theredhead/lucid-foundation';
+import { ToastService, type FilterDescriptor } from '@theredhead/lucid-kit';
 
 import { FetchlaneDatasource, type FetchlanePage } from './fetchlane-datasource';
 import type { FullTableSchema } from '../models';

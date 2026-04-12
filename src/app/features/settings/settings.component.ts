@@ -1,5 +1,11 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
-import { UIButton, UIInput, UIRadioGroup, UISelect, type SelectOption } from '@theredhead/ui-kit';
+import {
+  UIButton,
+  UIDropdownList,
+  UIInput,
+  UIRadioGroup,
+  type SelectOption,
+} from '@theredhead/lucid-kit';
 
 import { ConnectionManagerService } from '../../core/services/connection-manager.service';
 import { AuthorizationService } from '../../core/services/authorization.service';
@@ -16,7 +22,7 @@ import type { ConnectionConfig } from '../../core/models';
   templateUrl: './settings.component.html',
   styleUrl: './settings.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [UIButton, UIInput, UIRadioGroup, UISelect],
+  imports: [UIButton, UIDropdownList, UIInput, UIRadioGroup],
   host: { class: 'bo-settings' },
 })
 export class BoSettings {

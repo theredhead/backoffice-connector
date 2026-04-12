@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
-import type { FormFieldDefinition, FormGroupDefinition, FormSchema } from '@theredhead/ui-forms';
+import type { FormFieldDefinition, FormGroupDefinition, FormSchema } from '@theredhead/lucid-forms';
 
-import { LoggerFactory } from '@theredhead/foundation';
+import { LoggerFactory } from '@theredhead/lucid-foundation';
 import type { ColumnInfo, FullTableSchema } from '../models';
 import { FORM_OVERRIDES } from '../config/form-overrides';
 import { FetchlaneService } from './fetchlane.service';
@@ -163,8 +163,8 @@ export class SchemaFormFactory {
   private buildValidation(
     col: ColumnInfo,
     isPk: boolean,
-  ): readonly import('@theredhead/ui-forms').ValidationRule[] {
-    const rules: import('@theredhead/ui-forms').ValidationRule[] = [];
+  ): readonly import('@theredhead/lucid-forms').ValidationRule[] {
+    const rules: import('@theredhead/lucid-forms').ValidationRule[] = [];
 
     if (!col.is_nullable && !col.is_identity && col.column_default === null) {
       rules.push({ type: 'required', message: `${this.humanize(col.column_name)} is required.` });

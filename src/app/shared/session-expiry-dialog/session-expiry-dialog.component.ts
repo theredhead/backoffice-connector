@@ -7,7 +7,7 @@ import {
   signal,
 } from '@angular/core';
 
-import { UIButton, ModalRef } from '@theredhead/ui-kit';
+import { UIButton, ModalRef } from '@theredhead/lucid-kit';
 
 export type SessionExpiryAction = 'extend' | 'logout';
 

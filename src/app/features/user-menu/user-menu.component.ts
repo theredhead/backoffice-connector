@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
-import { PopoverRef, type UIPopoverContent } from '@theredhead/ui-kit';
+import { PopoverRef, type UIPopoverContent } from '@theredhead/lucid-kit';
 
 export type UserMenuAction = 'account' | 'logout';
 

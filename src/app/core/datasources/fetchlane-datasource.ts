@@ -15,8 +15,8 @@ import {
   SortDirection,
   type Logger,
   LoggerFactory,
-} from '@theredhead/foundation';
-import { ToastService, type FilterDescriptor, type FilterRule } from '@theredhead/ui-kit';
+} from '@theredhead/lucid-foundation';
+import { ToastService, type FilterDescriptor, type FilterRule } from '@theredhead/lucid-kit';
 
 import type {
   ConnectionConfig,
@@ -248,6 +248,7 @@ export class FetchlaneDatasource
   public updateRow(updatedRow: Record<string, unknown>): void {
     const pkCol = this.getPrimaryKeyColumn();
     if (!pkCol) {
+      this.log.warn('updateRow: no primary key column found');
       return;
     }
     const pkValue = updatedRow[pkCol];

@@ -24,7 +24,7 @@ signal-based) that connects to multiple database engines through
 - **Keycloak authentication** — PKCE-based OIDC login with role-based access
   (`admin` = full CRUD, `guest` = read-only).
 - **Theming** — Material 3 design tokens with automatic dark mode via
-  `@theredhead/ui-theme`.
+  `@theredhead/lucid-theme`.
 
 ## Prerequisites
 

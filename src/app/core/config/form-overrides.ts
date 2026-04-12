@@ -1,4 +1,4 @@
-import type { FormSchema } from '@theredhead/ui-forms';
+import type { FormSchema } from '@theredhead/lucid-forms';
 
 /**
  * Global form overrides keyed by `"<table_name>:<mode>"`.

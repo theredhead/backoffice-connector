@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input, signal } from '@angular/core';
 
-import { LoggerFactory } from '@theredhead/foundation';
-import { UIButton, UIIcon, UIIcons, ModalRef } from '@theredhead/ui-kit';
-import { FormEngine, UIForm } from '@theredhead/ui-forms';
-import type { FormSchema, FormValues } from '@theredhead/ui-forms';
+import { LoggerFactory } from '@theredhead/lucid-foundation';
+import { UIButton, UIIcon, UIIcons, ModalRef } from '@theredhead/lucid-kit';
+import { FormEngine, UIForm } from '@theredhead/lucid-forms';
+import type { FormSchema, FormValues } from '@theredhead/lucid-forms';
 import type { DbEngine } from '../../core/datasources/fetchlane-datasource';
 
 export interface RecordFormResult {

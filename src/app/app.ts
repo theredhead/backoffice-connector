@@ -2,7 +2,7 @@ import { afterNextRender, ChangeDetectionStrategy, Component, inject, signal } f
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { filter } from 'rxjs';
-import { UINavigationPage, navItem, type NavigationNode } from '@theredhead/ui-blocks';
+import { UINavigationPage, navItem, type NavigationNode } from '@theredhead/lucid-blocks';
 import {
   PopoverService,
   UIAvatar,
@@ -11,9 +11,9 @@ import {
   UIIcons,
   UISidebarFooter,
   UIToastContainer,
-} from '@theredhead/ui-kit';
+} from '@theredhead/lucid-kit';
 
-import { LoggerFactory } from '@theredhead/foundation';
+import { LoggerFactory } from '@theredhead/lucid-foundation';
 import { AuthorizationService } from './core/services/authorization.service';
 import { SessionMonitorService } from './core/services/session-monitor.service';
 import { BoUserMenu, type UserMenuAction } from './features/user-menu/user-menu.component';

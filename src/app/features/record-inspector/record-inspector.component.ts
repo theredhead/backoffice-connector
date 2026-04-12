@@ -21,9 +21,9 @@ import {
   UIIcons,
   ModalService,
   ToastService,
-} from '@theredhead/ui-kit';
+} from '@theredhead/lucid-kit';
 
-import { LoggerFactory } from '@theredhead/foundation';
+import { LoggerFactory } from '@theredhead/lucid-foundation';
 import type { DbEngine } from '../../core/datasources/fetchlane-datasource';
 import { ConnectionManagerService } from '../../core/services/connection-manager.service';
 import { FetchlaneService } from '../../core/services/fetchlane.service';

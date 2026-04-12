@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { JsonPipe } from '@angular/common';
 
-import { ArrayDatasource, LoggerFactory } from '@theredhead/foundation';
+import { ArrayDatasource, LoggerFactory } from '@theredhead/lucid-foundation';
 import {
   UICheckbox,
   UIButton,
@@ -16,10 +16,10 @@ import {
   UIIcons,
   UITextColumn,
   ToastService,
-} from '@theredhead/ui-kit';
-import { UIMasterDetailView } from '@theredhead/ui-blocks';
-import { FormEngine, UIForm } from '@theredhead/ui-forms';
-import type { FormSchema } from '@theredhead/ui-forms';
+} from '@theredhead/lucid-kit';
+import { UIMasterDetailView } from '@theredhead/lucid-blocks';
+import { FormEngine, UIForm } from '@theredhead/lucid-forms';
+import type { FormSchema } from '@theredhead/lucid-forms';
 import { ConnectionManagerService } from '../../core/services/connection-manager.service';
 import { FetchlaneService } from '../../core/services/fetchlane.service';
 import { PreferencesService } from '../../core/services/preferences.service';

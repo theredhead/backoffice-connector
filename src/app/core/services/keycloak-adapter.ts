@@ -1,7 +1,7 @@
 import { inject, Injectable, signal } from '@angular/core';
 import Keycloak from 'keycloak-js';
 
-import { LoggerFactory } from '@theredhead/foundation';
+import { LoggerFactory } from '@theredhead/lucid-foundation';
 import { OidcAdapter } from './oidc-adapter';
 import { environment } from '../../../environments/environment';
 

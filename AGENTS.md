@@ -18,11 +18,11 @@ mappings to their source:
 
 | Package                  | Scope      | Purpose                                                         |
 | ------------------------ | ---------- | --------------------------------------------------------------- |
-| `@theredhead/foundation` | Core       | Logger, type utilities, base classes, UISurface directive       |
-| `@theredhead/ui-kit`     | Primitives | Button, Input, Select, Table View, Tabs, Icon, Pagination, etc. |
-| `@theredhead/ui-blocks`  | Composites | Master-Detail View, Property Sheet, Navigation Page             |
-| `@theredhead/ui-theme`   | Theming    | ThemeService, SCSS Material 3 theme mixin, design tokens        |
-| `@theredhead/ui-forms`   | Forms      | JSON-driven form engine, validation, field registry             |
+| `@theredhead/lucid-foundation` | Core       | Logger, type utilities, base classes, UISurface directive       |
+| `@theredhead/lucid-kit`     | Primitives | Button, Input, Select, Table View, Tabs, Icon, Pagination, etc. |
+| `@theredhead/lucid-blocks`  | Composites | Master-Detail View, Property Sheet, Navigation Page             |
+| `@theredhead/lucid-theme`   | Theming    | ThemeService, SCSS Material 3 theme mixin, design tokens        |
+| `@theredhead/lucid-forms`   | Forms      | JSON-driven form engine, validation, field registry             |
 
 ### Infrastructure
 
@@ -114,10 +114,10 @@ implicit `public`. This applies to constructors as well.
 ## Logging
 
 **Never call `console.log` / `console.warn` / `console.error` directly.**
-Use the `Logger` from `@theredhead/foundation` instead.
+Use the `Logger` from `@theredhead/lucid-foundation` instead.
 
 ```ts
-import { LoggerFactory } from '@theredhead/foundation';
+import { LoggerFactory } from '@theredhead/lucid-foundation';
 
 export class BoTableBrowser {
   private readonly log = inject(LoggerFactory).createLogger('BoTableBrowser');
@@ -137,7 +137,7 @@ export class BoTableBrowser {
 Use the `UIIcon` component with SVG content from the `UIIcons` registry:
 
 ```ts
-import { UIIcon, UIIcons } from '@theredhead/ui-kit';
+import { UIIcon, UIIcons } from '@theredhead/lucid-kit';
 ```
 
 ---
@@ -161,7 +161,7 @@ Whenever you set a `color` (foreground) you **must** also set a `background`
 | `--ui-*`  | Design tokens from the UI library | `--ui-text`, `--ui-surface`         |
 | `--bo-*`  | App-specific tokens               | `--bo-sidebar-width`, `--bo-nav-bg` |
 
-Dark mode is handled globally by `@theredhead/ui-theme`. Components consume
+Dark mode is handled globally by `@theredhead/lucid-theme`. Components consume
 tokens via `var(--ui-text)` etc. — never declare per-component dark mode blocks.
 
 ---

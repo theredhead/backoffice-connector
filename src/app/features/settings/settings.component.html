@@ -9,7 +9,7 @@
 
 <div class="bo-section">
   <h2 class="bo-section-heading">Active Connection</h2>
-  <ui-select
+  <ui-dropdown-list
     [options]="connectionOptions()"
     [value]="activeConnectionValue()"
     (valueChange)="onConnectionChange($event)"

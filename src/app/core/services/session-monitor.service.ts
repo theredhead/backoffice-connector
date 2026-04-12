@@ -1,7 +1,7 @@
 import { DestroyRef, effect, inject, Injectable, Injector, signal } from '@angular/core';
 
-import { LoggerFactory } from '@theredhead/foundation';
-import { ModalRef, ModalService } from '@theredhead/ui-kit';
+import { LoggerFactory } from '@theredhead/lucid-foundation';
+import { ModalRef, ModalService } from '@theredhead/lucid-kit';
 import { AuthorizationService } from './authorization.service';
 import {
   BoSessionExpiryDialog,

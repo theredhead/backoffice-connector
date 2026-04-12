@@ -1,8 +1,6 @@
-import '../../../test-setup';
 import { TestBed } from '@angular/core/testing';
 import { SchemaFormFactory, type FormMode } from './schema-form-factory.service';
 import { FetchlaneService } from './fetchlane.service';
-import { LoggerFactory } from '@theredhead/foundation';
 import type { ColumnInfo, FullTableSchema, ForeignKeyInfo } from '../models';
 
 // ── Helpers ──────────────────────────────────────────────────────────

@@ -1,8 +1,8 @@
 import '@angular/compiler';
-import '../test-setup';
+
 import { TestBed } from '@angular/core/testing';
-import { FormFieldRegistry, BUILT_IN_FIELDS } from '@theredhead/ui-forms';
-import { UIInput } from '@theredhead/ui-kit';
+import { FormFieldRegistry, BUILT_IN_FIELDS } from '@theredhead/lucid-forms';
+import { UIInput } from '@theredhead/lucid-kit';
 import { appConfig } from './app.config';
 
 describe('appConfig', () => {
