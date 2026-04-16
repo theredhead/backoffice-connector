@@ -9,7 +9,7 @@ server {
     }
 
     location /api/postgres/ {
-        proxy_pass ${FETCHLANE_NAVIGATOR_POSTGRES_API_UPSTREAM}/api/;
+        proxy_pass ${FETCHLANE_NAVIGATOR_POSTGRES_API_UPSTREAM}/;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -17,7 +17,7 @@ server {
     }
 
     location /api/mysql/ {
-        proxy_pass ${FETCHLANE_NAVIGATOR_MYSQL_API_UPSTREAM}/api/;
+        proxy_pass ${FETCHLANE_NAVIGATOR_MYSQL_API_UPSTREAM}/;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -25,7 +25,7 @@ server {
     }
 
     location /api/mssql/ {
-        proxy_pass ${FETCHLANE_NAVIGATOR_MSSQL_API_UPSTREAM}/api/;
+        proxy_pass ${FETCHLANE_NAVIGATOR_MSSQL_API_UPSTREAM}/;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
