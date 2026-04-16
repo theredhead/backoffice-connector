@@ -1,0 +1,13 @@
+:host {
+  display: block;
+  flex: 1;
+  overflow: auto;
+  /* Isolate from app dark mode — Swagger UI only has a light theme */
+  color-scheme: light;
+  background: #fff;
+  color: #3b4151;
+}
+
+.swagger-container {
+  min-height: 100%;
+}

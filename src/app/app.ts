@@ -48,6 +48,7 @@ export class App {
     navItem('browse', 'Tables', { route: 'browse', icon: UIIcons.Lucide.Files.Table }),
     navItem('schema', 'Schema', { route: 'schema', icon: UIIcons.Lucide.Development.Braces }),
     navItem('settings', 'Settings', { route: 'settings', icon: UIIcons.Lucide.Account.Settings }),
+    navItem('swagger', 'API Docs', { route: 'swagger', icon: UIIcons.Lucide.Development.Code }),
   ];
 
   public constructor() {

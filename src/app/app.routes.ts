@@ -31,4 +31,10 @@ export const routes: Routes = [
     data: { navLabel: 'Settings' },
     loadComponent: () => import('./features/settings/settings.component').then((m) => m.BoSettings),
   },
+  {
+    path: 'swagger',
+    data: { navLabel: 'API Docs' },
+    loadComponent: () =>
+      import('./features/swagger-viewer/swagger-viewer.component').then((m) => m.BoSwaggerViewer),
+  },
 ];

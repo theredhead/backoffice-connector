@@ -4,6 +4,16 @@
 > repository.** Every convention, pattern, and architectural decision is
 > documented here. When in doubt, follow this file.
 
+## Session Start Protocol
+
+At the start of every new session in this repository, the agent **must** begin
+its first response with:
+
+> "I have read AGENTS.md."
+
+This confirms the conventions below are active. If this line is absent, remind
+the agent to re-read this file before proceeding.
+
 ---
 
 ## Project Overview
@@ -16,13 +26,13 @@ API backends, secured by **Keycloak** OIDC authentication.
 The app consumes the `@theredhead` component libraries via tsconfig path
 mappings to their source:
 
-| Package                  | Scope      | Purpose                                                         |
-| ------------------------ | ---------- | --------------------------------------------------------------- |
+| Package                        | Scope      | Purpose                                                         |
+| ------------------------------ | ---------- | --------------------------------------------------------------- |
 | `@theredhead/lucid-foundation` | Core       | Logger, type utilities, base classes, UISurface directive       |
-| `@theredhead/lucid-kit`     | Primitives | Button, Input, Select, Table View, Tabs, Icon, Pagination, etc. |
-| `@theredhead/lucid-blocks`  | Composites | Master-Detail View, Property Sheet, Navigation Page             |
-| `@theredhead/lucid-theme`   | Theming    | ThemeService, SCSS Material 3 theme mixin, design tokens        |
-| `@theredhead/lucid-forms`   | Forms      | JSON-driven form engine, validation, field registry             |
+| `@theredhead/lucid-kit`        | Primitives | Button, Input, Select, Table View, Tabs, Icon, Pagination, etc. |
+| `@theredhead/lucid-blocks`     | Composites | Master-Detail View, Property Sheet, Navigation Page             |
+| `@theredhead/lucid-theme`      | Theming    | ThemeService, SCSS Material 3 theme mixin, design tokens        |
+| `@theredhead/lucid-forms`      | Forms      | JSON-driven form engine, validation, field registry             |
 
 ### Infrastructure
 
