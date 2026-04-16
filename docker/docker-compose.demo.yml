@@ -7,6 +7,16 @@ services:
       context: ..
       dockerfile: docker/Dockerfile.app
     container_name: bo-app
+    environment:
+      FETCHLANE_NAVIGATOR_KEYCLOAK_URL: /auth
+      FETCHLANE_NAVIGATOR_KEYCLOAK_REALM: backoffice
+      FETCHLANE_NAVIGATOR_KEYCLOAK_CLIENT_ID: backoffice-app
+      FETCHLANE_NAVIGATOR_POSTGRES_API_UPSTREAM: http://fetchlane-postgres:3000
+      FETCHLANE_NAVIGATOR_MYSQL_API_UPSTREAM: http://fetchlane-mysql:3000
+      FETCHLANE_NAVIGATOR_MSSQL_API_UPSTREAM: http://fetchlane-mssql:3000
+      FETCHLANE_NAVIGATOR_KEYCLOAK_PROXY_UPSTREAM: http://keycloak:8080
+      FETCHLANE_NAVIGATOR_CONNECTIONS_JSON: >-
+        [{"name":"PostgreSQL","engine":"postgres","baseUrl":"/api/postgres"},{"name":"MySQL","engine":"mysql","baseUrl":"/api/mysql"},{"name":"SQL Server","engine":"mssql","baseUrl":"/api/mssql"}]
     ports:
       - "80:80"
     depends_on:

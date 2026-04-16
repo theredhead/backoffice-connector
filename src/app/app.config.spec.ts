@@ -1,14 +1,28 @@
 import '@angular/compiler';
 
+import { signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { FormFieldRegistry, BUILT_IN_FIELDS } from '@theredhead/lucid-forms';
 import { UIInput } from '@theredhead/lucid-kit';
 import { appConfig } from './app.config';
+import { OidcAdapter } from './core/services/oidc-adapter';
 
 describe('appConfig', () => {
   beforeEach(() => {
+    const oidcStub: OidcAdapter = {
+      authenticated: signal(false),
+      userName: signal(''),
+      roles: signal([]),
+      accountUrl: signal(null),
+      sessionExpiresAt: signal(null),
+      init: async () => {},
+      getToken: async () => '',
+      logout: () => {},
+      extendSession: async () => true,
+    };
+
     TestBed.configureTestingModule({
-      providers: appConfig.providers,
+      providers: [...(appConfig.providers ?? []), { provide: OidcAdapter, useValue: oidcStub }],
     });
   });
 

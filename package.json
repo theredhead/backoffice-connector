@@ -1,6 +1,6 @@
 {
   "name": "@theredhead/fetchlane-navigator",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "scripts": {
     "ng": "ng",
     "start:clean": "rm -f package-lock.json && npm cache clean --force && rm -rf node_modules .angular && npm install && ng serve",
@@ -11,7 +11,9 @@
     "docker:up": "docker compose -f docker/docker-compose.yml up -d",
     "docker:down": "docker compose -f docker/docker-compose.yml down",
     "docker:demo": "docker compose -f docker/docker-compose.yml -f docker/docker-compose.demo.yml up --build -d",
-    "docker:demo:down": "docker compose -f docker/docker-compose.yml -f docker/docker-compose.demo.yml down"
+    "docker:demo:down": "docker compose -f docker/docker-compose.yml -f docker/docker-compose.demo.yml down",
+    "docker:image:build": "docker build -f docker/Dockerfile.app -t theredhead/fetchlane-navigator:$npm_package_version -t theredhead/fetchlane-navigator:latest .",
+    "docker:image:publish": "docker buildx build --platform linux/amd64,linux/arm64 --push -f docker/Dockerfile.app -t theredhead/fetchlane-navigator:$npm_package_version -t theredhead/fetchlane-navigator:latest ."
   },
   "private": true,
   "packageManager": "npm@10.9.2",

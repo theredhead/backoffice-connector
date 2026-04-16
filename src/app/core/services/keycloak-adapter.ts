@@ -3,15 +3,15 @@ import Keycloak from 'keycloak-js';
 
 import { LoggerFactory } from '@theredhead/lucid-foundation';
 import { OidcAdapter } from './oidc-adapter';
-import { environment } from '../../../environments/environment';
+import { appEnvironment } from '../config/runtime-config';
 
 @Injectable()
 export class KeycloakAdapter extends OidcAdapter {
   private readonly log = inject(LoggerFactory).createLogger('KeycloakAdapter');
   private readonly keycloak = new Keycloak({
-    url: environment.keycloak.url,
-    realm: environment.keycloak.realm,
-    clientId: environment.keycloak.clientId,
+    url: appEnvironment.keycloak.url,
+    realm: appEnvironment.keycloak.realm,
+    clientId: appEnvironment.keycloak.clientId,
   });
 
   public readonly authenticated = signal(false);

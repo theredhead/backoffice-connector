@@ -56,6 +56,59 @@ Open <http://localhost:4200> and log in with one of the demo accounts:
 | `admin` | `admin`  | admin |
 | `guest` | `guest`  | guest |
 
+## Connect To Your Own Fetchlane Backend
+
+Use this path if Fetchlane is already running against your own database.
+
+### 1. Configure Keycloak
+
+Fetchlane Navigator and your Fetchlane backend must trust the same Keycloak
+realm.
+
+- Realm: `backoffice` by default
+- SPA client: `backoffice-app` with PKCE (`S256`)
+- Redirect URI: `http://localhost:4200/*`
+- Web origin: `http://localhost:4200`
+- API audience in access tokens: `fetchlane-api`
+
+The example realm export lives in `src/keycloak/backoffice-realm.json`.
+
+### 2. Configure Fetchlane
+
+Your Fetchlane config must:
+
+- enable `oidc-jwt` authentication
+- use the same issuer URL as the frontend Keycloak realm
+- expect audience `fetchlane-api`
+- allow CORS from `http://localhost:4200`
+
+This repo includes working examples in `src/fetchlane-config/`.
+
+### 3. Point the frontend at your backend
+
+For a permanent connection, edit `src/environments/environment.development.ts`
+and replace one of the default `baseUrl` values with your Fetchlane URL, for
+example:
+
+```ts
+connections: [
+  { name: 'My Backend', engine: 'custom', baseUrl: 'http://localhost:3000' },
+],
+```
+
+If your Keycloak server, realm, or client ID differ from the defaults, update
+the `keycloak` block in the same file too.
+
+### 4. Start the app
+
+```bash
+npm install
+npm start
+```
+
+Then open <http://localhost:4200>, sign in through Keycloak, and browse your
+Fetchlane-backed data.
+
 ### Full containerised demo
 
 To run everything inside Docker (including the Angular app served by nginx):
@@ -63,6 +116,9 @@ To run everything inside Docker (including the Angular app served by nginx):
 ```bash
 npm run docker:demo
 ```
+
+For production-style Docker deployment and runtime environment variables, see
+`docs/production.md`.
 
 ### Tear down
 

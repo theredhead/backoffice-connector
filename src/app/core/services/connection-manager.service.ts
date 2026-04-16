@@ -1,12 +1,12 @@
 import { computed, Injectable, signal } from '@angular/core';
 
 import type { ConnectionConfig } from '../models';
-import { environment } from '../../../environments/environment';
+import { appEnvironment } from '../config/runtime-config';
 
 @Injectable({ providedIn: 'root' })
 export class ConnectionManagerService {
   public readonly connections = signal<readonly ConnectionConfig[]>(
-    environment.connections as ConnectionConfig[],
+    appEnvironment.connections as ConnectionConfig[],
   );
 
   public readonly activeIndex = signal(this.loadActiveIndex());
@@ -55,7 +55,7 @@ export class ConnectionManagerService {
       if (
         !isNaN(index) &&
         index >= 0 &&
-        index < (environment.connections as ConnectionConfig[]).length
+        index < (appEnvironment.connections as ConnectionConfig[]).length
       ) {
         return index;
       }

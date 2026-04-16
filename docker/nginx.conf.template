@@ -9,7 +9,7 @@ server {
     }
 
     location /api/postgres/ {
-        proxy_pass http://fetchlane-postgres:3000/api/;
+        proxy_pass ${FETCHLANE_NAVIGATOR_POSTGRES_API_UPSTREAM}/api/;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -17,7 +17,7 @@ server {
     }
 
     location /api/mysql/ {
-        proxy_pass http://fetchlane-mysql:3000/api/;
+        proxy_pass ${FETCHLANE_NAVIGATOR_MYSQL_API_UPSTREAM}/api/;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -25,7 +25,7 @@ server {
     }
 
     location /api/mssql/ {
-        proxy_pass http://fetchlane-mssql:3000/api/;
+        proxy_pass ${FETCHLANE_NAVIGATOR_MSSQL_API_UPSTREAM}/api/;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -33,7 +33,7 @@ server {
     }
 
     location /auth/ {
-        proxy_pass http://keycloak:8080/;
+        proxy_pass ${FETCHLANE_NAVIGATOR_KEYCLOAK_PROXY_UPSTREAM}/;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
